@@ -1,41 +1,79 @@
-// Learn cc.Class:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
+        jumpSpeed: 900,
+        jumpSpeedBonus: 500,
+        canvas: {
+            default: null,
+            type: cc.Node
+        },
+        log: {
+            default: null,
+            type: cc.Label
+        },
+
     },
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {},
 
     start () {
 
     },
 
-    // update (dt) {},
+    update (dt) {
+        this.log.string = this.rigidbody.linearVelocity.y.toFixed(3);
+    },
+
+    init(game){
+        this.game = game;
+    },
+
+    onLoad () {
+        // open Accelerometer
+        this.canvas.on(cc.Node.EventType.TOUCH_START, this.jumpClick, this);
+        this.rigidbody = this.node.getComponent(cc.RigidBody);
+        this.speed = 0;
+        this.bonusJump = 0;
+        this.cacheJump = false;
+        this.isJumping = false;
+
+    },
+
+    jumpClick(event){
+        // this.rigidbody.linearVelocity.y.toFixed(3) == 0
+        if(this.isJumping == false && this.rigidbody.linearVelocity.y.toFixed(3) == 0){
+            this.onJump();
+        }else if (this.bonusJump == 0 && this.rigidbody.linearVelocity.y < 0){
+            this.bonusJump++;
+            this.rigidbody.linearVelocity = new cc.Vec2(this.speed,this.jumpSpeedBonus);
+        }else{
+            this.cacheJump = true;
+        }
+    },
+
+    onJump(){
+        this.isJumping = true;
+        this.cacheJump = false;
+        this.bonusJump=0;
+        this.rigidbody.linearVelocity = new cc.Vec2(this.speed,this.jumpSpeed);
+    },
+
+    onBeginContact: function (contact, selfCollider, otherCollider) {
+        switch(otherCollider.node.group){
+            case 'enemy':{
+                console.log('game over');
+                break;
+            }
+            case 'ground': {
+                this.isJumping = false;
+                if(this.cacheJump){
+                    this.onJump();
+                }
+                break;
+            }
+            default:
+                break;
+
+        }
+    },
 });
