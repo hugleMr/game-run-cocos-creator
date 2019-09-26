@@ -39,10 +39,27 @@ cc.Class({
 
     onLoad () {
         cc.director.getPhysicsManager().enabled = true;
+        console.log(window.location.href);
+        var search = this.getUrlVars();
+        console.log(search);
+        this.lang = search['lang'] == null? 'vi' : search['lang'];
+        this.max_score = search['max_score'] == null? 5 : Number(search['max_score']);
+        console.log('lang: ' + this.lang);
+        console.log('max_score: ' + this.max_score);
+
         instance.game = this;
     },
 
     start () {
+       
+    },
+
+    getUrlVars() {
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+            vars[key] = value;
+        });
+        return vars;
     },
 
     onStartGame(){
@@ -128,5 +145,12 @@ cc.Class({
     gameOver(){
         instance.isPlay = false;
         this.uiStart.active = true;
+    },
+
+    onBack(){
+        confirmQuitGame();
+    },
+    onFinish(){
+        gameComplete('action=finish&data=5');
     }
 });
