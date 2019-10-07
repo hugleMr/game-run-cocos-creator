@@ -1,4 +1,3 @@
-import {instance} from 'Config';
 
 cc.Class({
     extends: cc.Component,

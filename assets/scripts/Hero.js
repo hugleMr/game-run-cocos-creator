@@ -1,5 +1,4 @@
 
-import {instance} from 'Config';
 var State = cc.Enum({
     Idel   : -1,
     Dead   : -1,
@@ -52,10 +51,10 @@ cc.Class({
     },
 
     update (dt) {
-        if(instance.isPlay){
-            this.node.x += instance.speed * dt;
+        if(window.game.isPlay){
+            this.node.x += window.game.speed * dt;
             if(this.node.y < -400){
-                instance.game.gameOver();
+                window.game.game.gameOver();
                 cc.audioEngine.playEffect(this.diedAudio);
             }
             if(this.state == State.Jump && this.rigidbody.linearVelocity.y < 0){
@@ -80,7 +79,7 @@ cc.Class({
         this.bonusJump = 0;
         this.cacheJump = false;
         this.state = State.Idel
-        instance.hero = this;
+        window.game.hero = this;
         this.jumpTime = 1.7;
 
     },
@@ -119,8 +118,8 @@ cc.Class({
     onBeginContact: function (contact, selfCollider, otherCollider) {
         switch(otherCollider.node.group){
             case 'enemy':{
-                instance.isPlay = false;
-                this.state = State.Dead;
+                window.game.game.gameOver();
+                cc.audioEngine.playEffect(this.diedAudio);
                 break;
             }
             case 'ground': {

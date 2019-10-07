@@ -1,5 +1,3 @@
-import {instance} from 'Config';
-
 
 cc.Class({
     extends: cc.Component,
@@ -31,8 +29,15 @@ cc.Class({
         speedlabel:{
             default: null,
             type: cc.Label
-        }
-
+        },
+        popupQuit:{
+            default:null,
+            type:cc.Node
+        },
+        popupWin:{
+            default:null,
+            type:cc.Node
+        },
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -47,7 +52,7 @@ cc.Class({
         console.log('lang: ' + this.lang);
         console.log('max_score: ' + this.max_score);
 
-        instance.game = this;
+        window.game.game = this;
     },
 
     start () {
@@ -69,9 +74,9 @@ cc.Class({
             this.startGround = null;
         }
         this.uiStart.active = false;
-        instance.speed = this.initSpeed;
-        instance.hero.init();
-        instance.isPlay = true;
+        window.game.speed = this.initSpeed;
+        window.game.hero.init();
+        window.game.isPlay = true;
         for(var i in this.groundActive)
         {
             this.groundActive[i].destroy();
@@ -86,11 +91,11 @@ cc.Class({
     spawnFistGround(){
         this.groundRoot.setPosition(new cc.v2(0, 0));
         this.pos = -700;
-        this.spawnGround(0, instance.WIDTH_TILE * 5, 0);
+        this.spawnGround(0, window.game.WIDTH_TILE * 5, 0);
     },
 
     spawnNextGround(){
-        var height = Math.random() * instance.HEIGHT_MAX;
+        var height = Math.random() * window.game.HEIGHT_MAX;
         /// caculator meta
         var jumpDistance = this.getMaxDistance();
         var offset = Math.random() * (jumpDistance - 200)+ 200;
@@ -101,10 +106,10 @@ cc.Class({
         }else{
             minWidth = jumpDistance - offset + this.oldHeight - height;
         }
-        minWidth = Math.max(minWidth, instance.WIDTH_TILE);
+        minWidth = Math.max(minWidth, window.game.WIDTH_TILE);
         var maxWidth = jumpDistance - offset + 600;
         var width = Math.random() * (maxWidth - minWidth) + minWidth;
-        width = Math.round (width / instance.WIDTH_TILE) * instance.WIDTH_TILE;
+        width = Math.round (width / window.game.WIDTH_TILE) * window.game.WIDTH_TILE;
         /// spawn
         this.spawnGround(offset, width, height);
     },
@@ -121,7 +126,7 @@ cc.Class({
     },
 
     getMaxDistance(){
-        return instance.speed * instance.hero.jumpTime;
+        return window.game.speed * window.game.hero.jumpTime;
     },
 
     despawnGround (ground) {
@@ -131,26 +136,24 @@ cc.Class({
     },
 
     update (dt) {
-        if(instance.isPlay == true){
-            if((this.groundActive[0].x + this.groundActive[0].getComponent('Ground').width + 700) < instance.hero.node.x ){
+        if(window.game.isPlay == true){
+            if((this.groundActive[0].x + this.groundActive[0].getComponent('Ground').width + 700) < window.game.hero.node.x ){
                 this.despawnGround(this.groundActive[0])
             }
-            if(instance.speed < this.speedMax){
-                instance.speed += this.speedDamping * dt;
-                this.speedlabel.string = 'Speed: ' + instance.speed.toFixed(0);
+            if(window.game.speed < this.speedMax){
+                window.game.speed += this.speedDamping * dt;
             }
+            this.speedlabel.string =window.localize.text('score') + ' ' + window.game.hero.node.x.toFixed(0);
+            window.game.score = window.game.hero.node.x.toFixed(0);
         }
     },
     
     gameOver(){
-        instance.isPlay = false;
-        this.uiStart.active = true;
+        window.game.isPlay = false;
+        this.popupWin.active = true;
     },
 
     onBack(){
-        confirmQuitGame();
+        this.popupQuit.active = true;
     },
-    onFinish(){
-        gameComplete('action=finish&data=5');
-    }
 });

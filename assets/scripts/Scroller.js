@@ -1,4 +1,3 @@
-import {instance} from 'Config';
 
 cc.Class({
     extends: cc.Component,
@@ -11,7 +10,7 @@ cc.Class({
     },
 
     update (dt) {
-        if (instance.isPlay == false) {
+        if (window.game.isPlay == false) {
             return;
         }
         var x = this.node.x;

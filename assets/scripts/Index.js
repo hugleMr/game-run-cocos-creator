@@ -1,7 +1,8 @@
-function confirmQuitGame(){
+
+function callGameQuit(){
     Toaster.postMessage("action=quit");
 }
 
-function gameComplete(result){
-    Toaster.postMessage(result);
+function callGameComplete(score){
+    Toaster.postMessage('action=finish&data=' + score);
 }
