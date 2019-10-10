@@ -1,9 +1,9 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "jump",
+  "_name": "Jump",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.05,
+  "_duration": 0.016666666666666666,
   "sample": 60,
   "speed": 0.2,
   "wrapMode": 1,
@@ -16,19 +16,7 @@
               {
                 "frame": 0,
                 "value": {
-                  "__uuid__": "a403e334-7b32-443d-985c-f20bc5d278a8"
-                }
-              },
-              {
-                "frame": 0.016666666666666666,
-                "value": {
-                  "__uuid__": "a6d2bb45-d535-44b4-9812-69113f7787fc"
-                }
-              },
-              {
-                "frame": 0.03333333333333333,
-                "value": {
-                  "__uuid__": "d23d7e62-f7b7-459a-bfed-50bf3ffd4b4a"
+                  "__uuid__": "1ceaef2e-5075-4187-9a63-f25e7a53f2c3"
                 }
               }
             ]

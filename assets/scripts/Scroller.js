@@ -10,7 +10,7 @@ cc.Class({
     },
 
     update (dt) {
-        if (window.game.isPlay == false) {
+        if (window.game.state != 1) {
             return;
         }
         var x = this.node.x;

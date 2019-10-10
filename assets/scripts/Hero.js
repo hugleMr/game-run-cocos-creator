@@ -5,6 +5,7 @@ var State = cc.Enum({
     Drop   : -1,
     Jump   : -1,
     Run    : -1,
+    None   : -1,
 });
 cc.Class({
     extends: cc.Component,
@@ -37,22 +38,27 @@ cc.Class({
         diedAudio: {
             default: null,
             type: cc.AudioClip
-        }
-
+        },
+        camera: {
+            default: null,
+            type: cc.Node
+        },
+        offsetCamera: 300,
+        bonusJumpMax: 0,
     },
 
     _updateAnimation () {
         var animName = State[this._state];
-        this.anim.stop();
+        // this.anim.stop();
         this.anim.play(animName);
     },
 
-    start () {
-    },
-
     update (dt) {
-        if(window.game.isPlay){
+
+        if(window.game.state == 1){
             this.node.x += window.game.speed * dt;
+            this.camera.x = this.node.x + this.offsetCamera;
+
             if(this.node.y < -400){
                 window.game.game.gameOver();
                 cc.audioEngine.playEffect(this.diedAudio);
@@ -80,21 +86,23 @@ cc.Class({
         this.cacheJump = false;
         this.state = State.Idel
         window.game.hero = this;
-        this.jumpTime = 1.7;
+        this.jumpTime = 1.4;
 
     },
 
     jumpClick(event){
-        // this.rigidbody.linearVelocity.y.toFixed(3) == 0
-        if((this.state != State.Jump || this.state != State.Drop) && this.rigidbody.linearVelocity.y.toFixed(3) == 0){
-            this.onJump();
-        }else if (this.bonusJump == 0 && this.rigidbody.linearVelocity.y < 0){
-            this.bonusJump++;
-            this.rigidbody.linearVelocity = new cc.Vec2(0,this.jumpSpeedBonus);
-            this.state = State.Jump;
-            cc.audioEngine.playEffect(this.jumpAudio);
-        }else if(this.rigidbody.linearVelocity.y < 0){
-            this.cacheJump = true;
+        if(window.game.state == 1){
+            // this.rigidbody.linearVelocity.y.toFixed(3) == 0
+            if((this.state != State.Jump || this.state != State.Drop) && this.rigidbody.linearVelocity.y.toFixed(3) == 0){
+                this.onJump();
+            }else if (this.bonusJump < this.bonusJumpMax && this.rigidbody.linearVelocity.y < 0){
+                this.bonusJump++;
+                this.rigidbody.linearVelocity = new cc.Vec2(0,this.jumpSpeedBonus);
+                this.state = State.Jump;
+                cc.audioEngine.playEffect(this.jumpAudio);
+            }else if(this.rigidbody.linearVelocity.y < 0){
+                this.cacheJump = true;
+            }
         }
     },
 

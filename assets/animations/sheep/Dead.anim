@@ -1,6 +1,6 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "die",
+  "_name": "Dead",
   "_objFlags": 0,
   "_native": "",
   "_duration": 0.016666666666666666,
@@ -16,7 +16,7 @@
               {
                 "frame": 0,
                 "value": {
-                  "__uuid__": "afa0b602-63d7-40c7-80c5-70091d7d4954"
+                  "__uuid__": "405782f6-adb9-4b21-a7d0-4393401aaaa2"
                 }
               }
             ]

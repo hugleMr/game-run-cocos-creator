@@ -5,9 +5,10 @@ cc.Class({
     properties: {
 
         groundPrefab: {
-            default: null,
-            type: cc.Prefab
+            default: [],
+            type: [cc.Prefab]
         },
+        groundWidth: [cc.Integer],
         groundRoot:{
             default: null,
             type: cc.Node
@@ -25,7 +26,7 @@ cc.Class({
 
         initSpeed: 300,
         speedDamping: 50,
-        speedMax: 1500,
+        speedMax: 1300,
         speedlabel:{
             default: null,
             type: cc.Label
@@ -40,23 +41,15 @@ cc.Class({
         },
     },
 
-    // LIFE-CYCLE CALLBACKS:
-
     onLoad () {
         cc.director.getPhysicsManager().enabled = true;
         console.log(window.location.href);
         var search = this.getUrlVars();
         console.log(search);
-        this.lang = search['lang'] == null? 'vi' : search['lang'];
-        this.max_score = search['max_score'] == null? 5 : Number(search['max_score']);
-        console.log('lang: ' + this.lang);
-        console.log('max_score: ' + this.max_score);
-
+        window.localize.languge = search['lang'] == null? 'vi' : search['lang'];
+        window.config.max_score = search['max_score'] == null? 5 : Number(search['max_score']);
         window.game.game = this;
-    },
-
-    start () {
-       
+        this.uiStart.active = true;
     },
 
     getUrlVars() {
@@ -67,16 +60,18 @@ cc.Class({
         return vars;
     },
 
+    onClickStart(){
+        this.startGround.destroy();
+        this.startGround = null;
+
+        this.uiStart.destroy();
+        this.uiStart = null;
+        this.onStartGame();
+    },
     onStartGame(){
-        if(this.startGround != null)
-        {
-            this.startGround.destroy();
-            this.startGround = null;
-        }
-        this.uiStart.active = false;
         window.game.speed = this.initSpeed;
         window.game.hero.init();
-        window.game.isPlay = true;
+        window.game.state = 1;
         for(var i in this.groundActive)
         {
             this.groundActive[i].destroy();
@@ -91,38 +86,42 @@ cc.Class({
     spawnFistGround(){
         this.groundRoot.setPosition(new cc.v2(0, 0));
         this.pos = -700;
-        this.spawnGround(0, window.game.WIDTH_TILE * 5, 0);
+        this.spawnGround(0, 0, 0);
     },
 
     spawnNextGround(){
-        var height = Math.random() * window.game.HEIGHT_MAX;
+        var height = Math.random() * window.game.HEIGHT_MAX - 50;
+        var index = Math.round (Math.random() * (this.groundPrefab.length - 2)) + 1;
+        // if(index == this.oldIndex && index != 1){
+        //     index--;
+        // }
         /// caculator meta
-        var jumpDistance = this.getMaxDistance();
-        var offset = Math.random() * (jumpDistance - 200)+ 200;
-        var minWidth = 0;
-        if(height > this.oldHeight){
-            offset -= height - this.oldHeight;
-            minWidth = jumpDistance - offset;
-        }else{
-            minWidth = jumpDistance - offset + this.oldHeight - height;
+        var maxDistance = this.getMaxDistance();
+        var minDistance = maxDistance - this.groundWidth[index] - this.groundWidth[this.oldIndex] + 150;;
+        if(height > this.oldHeight && maxDistance > 400){
+            maxDistance -= 300;
         }
-        minWidth = Math.max(minWidth, window.game.WIDTH_TILE);
-        var maxWidth = jumpDistance - offset + 600;
-        var width = Math.random() * (maxWidth - minWidth) + minWidth;
-        width = Math.round (width / window.game.WIDTH_TILE) * window.game.WIDTH_TILE;
+        var offset = 200;
+        if(maxDistance > 200){
+            minDistance = Math.max(minDistance, 200);
+            offset = Math.random() * (maxDistance - minDistance)+ minDistance; 
+        }
         /// spawn
-        this.spawnGround(offset, width, height);
+        this.spawnGround(offset, index, height);
     },
-    spawnGround(offset, width, height){
-        this.pos += offset + width / 2;
-        let ground = cc.instantiate(this.groundPrefab);
+
+    spawnGround(offset, index, height){
+        let ground = cc.instantiate(this.groundPrefab[index]);
         ground.parent = this.groundRoot;
-        ground.getComponent('Ground').init(width, this.pos, height);
+        var width = this.groundWidth[index];
+        this.pos = this.pos + offset;
+        ground.getComponent('Ground').init(this.pos, height);
         this.groundActive.push(ground);
-        this.pos += width / 2;
+        this.pos = this.pos + width;
         this.oldHeight = height;
-        console.log('spawn ground: ')
-        console.log(ground);
+        this.oldIndex = index;
+        // console.log('spawn ground: ' + index + ', ' + this.pos);
+        // console.log(ground);
     },
 
     getMaxDistance(){
@@ -136,20 +135,21 @@ cc.Class({
     },
 
     update (dt) {
-        if(window.game.isPlay == true){
-            if((this.groundActive[0].x + this.groundActive[0].getComponent('Ground').width + 700) < window.game.hero.node.x ){
+        if(window.game.state == 1){
+            if((this.groundActive[0].x + this.groundActive[0].width + 700) < window.game.hero.node.x ){
                 this.despawnGround(this.groundActive[0])
             }
             if(window.game.speed < this.speedMax){
                 window.game.speed += this.speedDamping * dt;
             }
-            this.speedlabel.string =window.localize.text('score') + ' ' + window.game.hero.node.x.toFixed(0);
             window.game.score = window.game.hero.node.x.toFixed(0);
+            this.speedlabel.string =window.localize.text('score') + ' ' + window.game.score;
+            // this.speedlabel.string =this.speedlabel.string + ' ,speed ' + window.game.speed.toFixed(0);
         }
     },
     
     gameOver(){
-        window.game.isPlay = false;
+        window.game.state = -1;
         this.popupWin.active = true;
     },
 

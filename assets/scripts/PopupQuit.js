@@ -19,6 +19,9 @@ cc.Class({
 
 
     onEnable () {
+        if(window.game.state == 1){
+            window.game.state = 0;
+        }
         this.txtQuitMessage.string = window.localize.textFormat('popup_quit_body', [window.config.max_score]);
         this.guide.scaleX = 0.0;
         this.guide.scaleY = 0.0;
@@ -32,7 +35,13 @@ cc.Class({
     onContinue(){
         this.guide.runAction(cc.scaleTo(0.25, 0, 0).easing(cc.easeQuadraticActionOut()));
         setTimeout(() => {
-            this.node.active = false;
+            this.closePopup();
         }, 250);
+    },
+    closePopup(){
+        this.node.active = false;
+        if(window.game.state == 0){
+            window.game.state = 1;
+        }
     }
 });
