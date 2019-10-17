@@ -19,17 +19,20 @@
     "_children": [
       {
         "__id__": 2
+      },
+      {
+        "__id__": 7
       }
     ],
     "_active": false,
     "_level": 4,
     "_components": [
       {
-        "__id__": 7
+        "__id__": 11
       }
     ],
     "_prefab": {
-      "__id__": 8
+      "__id__": 12
     },
     "_opacity": 255,
     "_color": {
@@ -41,7 +44,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 299,
+      "width": 398,
       "height": 220
     },
     "_anchorPoint": {
@@ -109,7 +112,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 299,
+      "width": 398,
       "height": 220
     },
     "_anchorPoint": {
@@ -119,7 +122,7 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 149.5,
+      "x": 199,
       "y": 0,
       "z": 0
     },
@@ -159,7 +162,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "93bd87c9-84bb-4306-bb32-e6c561445fa1"
+      "__uuid__": "8747ae8e-3671-4678-b245-ee0aef4bec34"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -221,7 +224,7 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 299,
+      "width": 398,
       "height": 220
     },
     "_id": ""
@@ -232,9 +235,134 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "936d9f5b-b121-4a25-8013-708477c50bd5"
+      "__uuid__": "5d24e515-2594-4b8a-a8de-772bc61960ed"
     },
     "fileId": "87MXWqUYdIGZe/0AzptDKS",
+    "sync": false
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "Enemy",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_active": true,
+    "_level": 5,
+    "_components": [
+      {
+        "__id__": 8
+      },
+      {
+        "__id__": 9
+      }
+    ],
+    "_prefab": {
+      "__id__": 10
+    },
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 0,
+      "height": 0
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_position": {
+      "__type__": "cc.Vec3",
+      "x": -50,
+      "y": 0,
+      "z": 0
+    },
+    "_scale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_eulerAngles": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_is3DNode": false,
+    "groupIndex": 3,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.RigidBody",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 7
+    },
+    "_enabled": true,
+    "_type": 0,
+    "_allowSleep": false,
+    "_gravityScale": 1,
+    "_linearDamping": 0,
+    "_angularDamping": 0,
+    "_linearVelocity": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_angularVelocity": 0,
+    "_fixedRotation": true,
+    "enabledContactListener": true,
+    "bullet": false,
+    "awakeOnLoad": true,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PhysicsBoxCollider",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 7
+    },
+    "_enabled": true,
+    "tag": 0,
+    "_density": 1,
+    "_sensor": false,
+    "_friction": 0,
+    "_restitution": 0,
+    "body": null,
+    "_offset": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_size": {
+      "__type__": "cc.Size",
+      "width": 12.9,
+      "height": 200
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__uuid__": "5d24e515-2594-4b8a-a8de-772bc61960ed"
+    },
+    "fileId": "f7nMhzVP1BBr3wXJYfANzP",
     "sync": false
   },
   {
@@ -253,7 +381,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "936d9f5b-b121-4a25-8013-708477c50bd5"
+      "__uuid__": "5d24e515-2594-4b8a-a8de-772bc61960ed"
     },
     "fileId": "5dHuEdZQZKzpy8tCAgdhc9",
     "sync": false

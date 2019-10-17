@@ -11,6 +11,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        initSpeed: 300,
         jumpSpeed: 900,
         jumpSpeedBonus: 500,
         canvas: {
@@ -45,6 +46,10 @@ cc.Class({
         },
         offsetCamera: 300,
         bonusJumpMax: 0,
+        fakerPrefab: {
+            default: null,
+            type: cc.Prefab
+        },
     },
 
     _updateAnimation () {
@@ -56,7 +61,7 @@ cc.Class({
     update (dt) {
 
         if(window.game.state == 1){
-            this.node.x += window.game.speed * dt;
+            // this.node.x += window.game.speed * dt;
             this.camera.x = this.node.x + this.offsetCamera;
 
             if(this.node.y < -400){
@@ -70,8 +75,9 @@ cc.Class({
     },
 
     init(){
+        window.game.speed = this.initSpeed;
         this.node.position = new cc.Vec2(0,0);
-        this.rigidbody.linearVelocity = new cc.Vec2(0,0);
+        this.rigidbody.linearVelocity = new cc.Vec2(window.game.speed,0);
         this.state = State.Run;
     },
 
@@ -86,18 +92,18 @@ cc.Class({
         this.cacheJump = false;
         this.state = State.Idel
         window.game.hero = this;
-        this.jumpTime = 1.4;
+        this.jumpTime = 1.1;
 
     },
 
     jumpClick(event){
-        if(window.game.state == 1){
+        if(window.game.state == 1 && window.game.tutorial == true){
             // this.rigidbody.linearVelocity.y.toFixed(3) == 0
             if((this.state != State.Jump || this.state != State.Drop) && this.rigidbody.linearVelocity.y.toFixed(3) == 0){
                 this.onJump();
             }else if (this.bonusJump < this.bonusJumpMax && this.rigidbody.linearVelocity.y < 0){
                 this.bonusJump++;
-                this.rigidbody.linearVelocity = new cc.Vec2(0,this.jumpSpeedBonus);
+                this.rigidbody.linearVelocity = new cc.Vec2(window.game.speed,this.jumpSpeedBonus);
                 this.state = State.Jump;
                 cc.audioEngine.playEffect(this.jumpAudio);
             }else if(this.rigidbody.linearVelocity.y < 0){
@@ -109,7 +115,10 @@ cc.Class({
     onJump(){
         this.cacheJump = false;
         this.bonusJump=0;
-        this.rigidbody.linearVelocity = new cc.Vec2(0,this.jumpSpeed);
+        if(window.game.speed < window.game.speedMax){
+            window.game.speed += window.game.speedDamping;
+        }
+        this.rigidbody.linearVelocity = new cc.Vec2(window.game.speed,this.jumpSpeed);
         this.state = State.Jump;
         cc.audioEngine.playEffect(this.jumpAudio);
 
@@ -134,13 +143,32 @@ cc.Class({
                 if(this.cacheJump){
                     this.onJump();
                 }else{
+                    this.rigidbody.linearVelocity = new cc.Vec2(window.game.speed,0);
                     this.state = State.Run;
                 }
                 break;
+            }
+            case 'tutorial':{
+                this.cacheJump = true;
+                window.game.game.showTurorial();
             }
             default:
                 break;
 
         }
+    },
+    pause(){
+        this.faker = cc.instantiate(this.fakerPrefab);
+        this.faker.parent = this.node.parent;
+        this.faker.position = this.node.position;
+
+        this.node.active = false;
+        this.state = State.Idel;
+    },
+
+    unpause(){
+        this.node.active = true;
+        this.state = State.Run; 
+        this.faker.destroy();
     },
 });

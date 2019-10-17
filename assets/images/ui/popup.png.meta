@@ -1,16 +1,16 @@
 {
   "ver": "2.3.1",
-  "uuid": "e6936c67-3d96-4fae-95bf-befd2fd4529d",
+  "uuid": "a36be039-2630-454c-8049-791d0f4af0e9",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "premultiplyAlpha": false,
   "platformSettings": {},
   "subMetas": {
-    "map_01": {
+    "popup": {
       "ver": "1.0.4",
-      "uuid": "a2b7e1ae-7edc-4936-86a8-6bf8c633d67b",
-      "rawTextureUuid": "e6936c67-3d96-4fae-95bf-befd2fd4529d",
+      "uuid": "aae94382-4de4-4990-991c-7b3eb9ffb157",
+      "rawTextureUuid": "a36be039-2630-454c-8049-791d0f4af0e9",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -18,14 +18,14 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 890,
-      "height": 220,
-      "rawWidth": 890,
-      "rawHeight": 220,
-      "borderTop": 0,
-      "borderBottom": 0,
-      "borderLeft": 0,
-      "borderRight": 0,
+      "width": 64,
+      "height": 64,
+      "rawWidth": 64,
+      "rawHeight": 64,
+      "borderTop": 20,
+      "borderBottom": 20,
+      "borderLeft": 20,
+      "borderRight": 20,
       "subMetas": {}
     }
   }

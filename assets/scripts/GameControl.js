@@ -24,9 +24,6 @@ cc.Class({
             type:cc.Node
         },
 
-        initSpeed: 300,
-        speedDamping: 50,
-        speedMax: 1300,
         speedlabel:{
             default: null,
             type: cc.Label
@@ -36,6 +33,18 @@ cc.Class({
             type:cc.Node
         },
         popupWin:{
+            default:null,
+            type:cc.Node
+        },
+        heart:{
+            default: [],
+            type: [cc.Node]
+        },
+        tutorial:{
+            default:null,
+            type:cc.Node
+        },
+        tutorialPoint:{
             default:null,
             type:cc.Node
         },
@@ -50,6 +59,7 @@ cc.Class({
         window.config.max_score = search['max_score'] == null? 5 : Number(search['max_score']);
         window.game.game = this;
         this.uiStart.active = true;
+        window.game.heart = this.heart.length;
     },
 
     getUrlVars() {
@@ -69,7 +79,7 @@ cc.Class({
         this.onStartGame();
     },
     onStartGame(){
-        window.game.speed = this.initSpeed;
+        window.game.hero.node.active = true;
         window.game.hero.init();
         window.game.state = 1;
         for(var i in this.groundActive)
@@ -85,19 +95,19 @@ cc.Class({
 
     spawnFistGround(){
         this.groundRoot.setPosition(new cc.v2(0, 0));
-        this.pos = -700;
+        this.pos = -200;
         this.spawnGround(0, 0, 0);
     },
 
     spawnNextGround(){
         var height = Math.random() * window.game.HEIGHT_MAX - 50;
         var index = Math.round (Math.random() * (this.groundPrefab.length - 2)) + 1;
-        // if(index == this.oldIndex && index != 1){
-        //     index--;
-        // }
+        if(index == this.oldIndex && index != 1){
+            index--;
+        }
         /// caculator meta
         var maxDistance = this.getMaxDistance();
-        var minDistance = maxDistance - this.groundWidth[index] - this.groundWidth[this.oldIndex] + 150;;
+        var minDistance = maxDistance - this.groundWidth[index] - this.groundWidth[this.oldIndex] + window.game.speed / 1.5;
         if(height > this.oldHeight && maxDistance > 400){
             maxDistance -= 300;
         }
@@ -139,20 +149,52 @@ cc.Class({
             if((this.groundActive[0].x + this.groundActive[0].width + 700) < window.game.hero.node.x ){
                 this.despawnGround(this.groundActive[0])
             }
-            if(window.game.speed < this.speedMax){
-                window.game.speed += this.speedDamping * dt;
-            }
-            window.game.score = window.game.hero.node.x.toFixed(0);
+            
+            window.game.score = (window.game.hero.node.x / 10).toFixed(0);
             this.speedlabel.string =window.localize.text('score') + ' ' + window.game.score;
+            if(window.game.score > window.game.score_over){
+                this.gameOver();
+            }
             // this.speedlabel.string =this.speedlabel.string + ' ,speed ' + window.game.speed.toFixed(0);
         }
     },
     
     gameOver(){
+        window.game.heart--;
+        for(var i = 0; i < this.heart.length; i++){
+            if(i< window.game.heart){
+                this.heart[i].color = new cc.Color(255, 0, 0,255);
+            }else{
+                this.heart[i].color = new cc.Color(230, 230, 230,255);
+            }
+        }
         window.game.state = -1;
+        window.game.hero.node.active = false;
+        if(window.game.high_score < window.game.score){
+            window.game.high_score = window.game.score;
+        }
         this.popupWin.active = true;
     },
 
+    showTurorial(){
+        this.tutorial.active = true;
+        this.tutorialPoint.destroy();
+        window.game.state = 0;
+        window.game.tutorial = true;
+        window.game.hero.pause();
+
+        var squashDuration = 0.3;
+        var squash = cc.scaleTo(squashDuration, 0.9, 0.9);
+        var stretch = cc.scaleTo(squashDuration, 1.1, 1.1);
+        var scaleBack = cc.scaleTo(squashDuration, 1, 1);
+        var anim = cc.repeatForever(cc.sequence(squash, stretch, scaleBack))
+        this.tutorial.runAction(anim);
+    },
+    finishTutorial(){
+        this.tutorial.destroy();
+        window.game.state = 1;
+        window.game.hero.unpause();
+    },
     onBack(){
         this.popupQuit.active = true;
     },

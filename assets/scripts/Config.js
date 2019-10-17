@@ -12,8 +12,11 @@ window.localize = {
             'congrat':'Congrats!',
             'score_detail':'You are won {0} Biggy in total in this stage.',
             'score':'Score:',
+            'high_score':'High score:',
             'play_again':'Play again',
-            'claim_reward':'Claim reward'
+            'claim_reward':'Claim reward',
+            'start':'START',
+            'tutorial':'Tap to jump!'
         },
         'vi':{
             'title':'HÃY THỬ VẬN MAY CỦA BẠN',
@@ -26,8 +29,11 @@ window.localize = {
             'congrat':'Xin chúc mừng',
             'score_detail':'Bạn đã dành được {0} Biggy, Nhận thưởng ngay.',
             'score':'Điểm:',
+            'high_score':'Điểm cao:',
             'play_again':'Chơi lại',
-            'claim_reward':'Nhận thưởng'
+            'claim_reward':'Nhận thưởng',
+            'start':'BẮT ĐẦU',
+            'tutorial':'Tap để nhảy!'
         },
     },
 
@@ -68,5 +74,11 @@ window.game = {
     },
     state: -1, // 1 : play, 0 : pause
     speed: 300,
+    speedMax: 1200,
+    speedDamping: 40,
     score: 0,
+    high_score: 0,
+    score_over: 5000,
+    heart: 3,
+    tutorial: false,
 }

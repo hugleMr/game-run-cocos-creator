@@ -21,6 +21,7 @@ cc.Class({
     onEnable () {
         if(window.game.state == 1){
             window.game.state = 0;
+            window.game.hero.pause();
         }
         this.txtQuitMessage.string = window.localize.textFormat('popup_quit_body', [window.config.max_score]);
         this.guide.scaleX = 0.0;
@@ -42,6 +43,7 @@ cc.Class({
         this.node.active = false;
         if(window.game.state == 0){
             window.game.state = 1;
+            window.game.hero.unpause();
         }
     }
 });
