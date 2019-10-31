@@ -61,6 +61,7 @@ cc.Class({
     update (dt) {
 
         if(window.game.state == 1){
+            console.log(window.game.speed);
             // this.node.x += window.game.speed * dt;
             this.camera.x = this.node.x + this.offsetCamera;
 

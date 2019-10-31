@@ -33,7 +33,7 @@ window.localize = {
             'play_again':'Chơi lại',
             'claim_reward':'Nhận thưởng',
             'start':'BẮT ĐẦU',
-            'tutorial':'Tap để nhảy!'
+            'tutorial':'Chạm để nhảy!'
         },
     },
 
@@ -57,8 +57,6 @@ window.config = {
 }
 
 window.game = {
-    speed: 0,
-    WIDTH_TILE : 235,
     HEIGHT_MAX : 100,
     hero: {
         default: null,
@@ -74,8 +72,8 @@ window.game = {
     },
     state: -1, // 1 : play, 0 : pause
     speed: 300,
-    speedMax: 1200,
-    speedDamping: 40,
+    speedMax: 1100,
+    speedDamping: 35,
     score: 0,
     high_score: 0,
     score_over: 5000,

@@ -39,6 +39,9 @@ cc.Class({
 
 
     onEnable () {
+        if(window.game.high_score < window.game.score){
+            window.game.high_score = window.game.score;
+        }
         this.biggy = Math.min(window.config.max_score, this.caculationBiggy(window.game.high_score));
         this.txtBiggy.string = window.localize.textFormat('score_detail', [this.biggy]);
         this.txtScore.string = window.game.score;

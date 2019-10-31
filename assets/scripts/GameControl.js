@@ -60,6 +60,7 @@ cc.Class({
         window.game.game = this;
         this.uiStart.active = true;
         window.game.heart = this.heart.length;
+        this.speedlabel.string =window.localize.text('score') + ' 0'
     },
 
     getUrlVars() {
@@ -101,13 +102,17 @@ cc.Class({
 
     spawnNextGround(){
         var height = Math.random() * window.game.HEIGHT_MAX - 50;
-        var index = Math.round (Math.random() * (this.groundPrefab.length - 2)) + 1;
+        var removeShort = 1;
+        if(window.game.speed > 900){
+            removeShort = 2;
+        }
+        var index = Math.round (Math.random() * (this.groundPrefab.length - 1 - removeShort)) + 1;
         if(index == this.oldIndex && index != 1){
             index--;
         }
         /// caculator meta
         var maxDistance = this.getMaxDistance();
-        var minDistance = maxDistance - this.groundWidth[index] - this.groundWidth[this.oldIndex] + window.game.speed / 1.5;
+        var minDistance = maxDistance - this.groundWidth[index] - this.groundWidth[this.oldIndex] + window.game.speed / 1.4;
         if(height > this.oldHeight && maxDistance > 400){
             maxDistance -= 300;
         }
